@@ -318,7 +318,6 @@
                 <div class="left"></div>
                 <div class="right"></div>
                 
-                <!-- Flowers hidden inside the envelope -->
                 <img class="flowers" id="flowerImg">
 
                 <div class="flap" id="flap">
@@ -337,7 +336,7 @@
         </div>
     </div>
 <div class="flower-rain" id="flowerRain"></div>
-<audio id="tunog" src="../diane/hbd.mp3"></audio>
+<audio id="tunog" src="./hbd.mp3"></audio>
 <script>
     const left = document.querySelector(".left");
     const right = document.querySelector(".right");
@@ -402,28 +401,22 @@
 
     const rect = envelope.getBoundingClientRect();
 
-    // EXACT starting point: middle of envelope
     const centerX = rect.left + rect.width / 2 - 35;
     const centerY = rect.top + rect.height / 2 - 35;
 
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
 
-    // Make enough circles to reach the entire screen
     const rings = 10;
 
     for (let ring = 1; ring <= rings; ring++) {
 
-        // Each circle gets MUCH bigger
         const radius = ring * 75;
-
-        // More flowers on larger circles
         const amount = 10 + ring * 5;
 
         for (let i = 0; i < amount; i++) {
 
         const flower = document.createElement("img");
-
         const random = Math.random();
 
         if (random < 0.3) {
@@ -453,12 +446,9 @@
 
             flowerRain.appendChild(flower);
 
-            // Spread flowers around the circle
             const angle =
                 (i / amount) * Math.PI * 2
                 + (Math.random() - 0.5) * 0.5;
-
-            // Randomize the distance
             const randomRadius =
                 radius + (Math.random() - 0.5) * 100;
 
@@ -470,7 +460,6 @@
                 centerY +
                 Math.sin(angle) * randomRadius;
 
-            // Allow flowers to reach the edges
             targetX = Math.max(
                 -40,
                 Math.min(screenWidth - 30, targetX)
@@ -481,10 +470,8 @@
                 Math.min(screenHeight - 30, targetY)
             );
 
-            // Each ring comes out after the previous ring
             setTimeout(() => {
 
-                // Make flower appear ONLY when it starts flying
                 flower.style.opacity = "1";
 
                 flower.style.left = targetX + "px";
@@ -494,12 +481,10 @@
         }
     }
 
-    // Fade everything after the explosion
     setTimeout(() => {
         flowerRain.classList.add("fade-out");
     }, 4000);
 
-    // Clean everything up
     setTimeout(() => {
         flowerRain.innerHTML = "";
         flowerRain.classList.remove("fade-out");
