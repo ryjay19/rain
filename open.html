@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>hulaan mo</title>
+
+<style>
+
+body {
+    background-color: #762ec8;
+    margin: 0;
+    user-select: none;
+    overflow: hidden;
+}
+
+.open {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.open button {
+    position: absolute;
+    font-weight: 600;
+    font-size: 20px;
+    background-color: #7726b9;
+    color: white;
+    border: 1px solid #4a008f;
+    padding: 20px 30px;
+    border-radius: 1.5em;
+    cursor: pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="open">
+    <button>Open</button>
+</div>
+
+<script>
+
+const button = document.querySelector(".open button");
+
+let clickCount = 0;
+
+button.addEventListener("click", () => {
+
+    clickCount++;
+
+    if (clickCount === 21) {
+
+        button.style.display = "none";
+        alert("wait boss");
+        window.location.href = "bagyo.html"
+    }
+
+    const randomX = Math.random() * (window.innerWidth - 200);
+    const randomY = Math.random() * (window.innerHeight - 100);
+
+    button.style.left = randomX + "px";
+    button.style.top = randomY + "px";
+
+});
+
+</script>
+
+</body>
+</html>
