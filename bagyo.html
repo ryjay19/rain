@@ -54,7 +54,7 @@
             position: absolute;
             top: 25%; 
             left: 58%;
-            transform: translate(-30%, 200%) rotate(5deg); 
+            transform: translate(-30%, 250%) rotate(6deg); 
             z-index: 2;
         }
 
@@ -74,7 +74,7 @@
         }
 
         @keyframes angat {
-            from { transform: translate(-30%, 200%) rotate(5deg); }
+            from { transform: translate(-30%, 250%) rotate(6deg); }
             to { transform: translate(-69%, 40%) rotate(0deg); }
         }
 
@@ -143,9 +143,9 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 80px;
+            width: 100px;
             height: auto;
-            transform: translate(-50%, -50%) scale(0);
+            transform: translate(-50%, -50%) rotate(90deg) scale(0);
             opacity: 0;
             transition: all 1s ease;
             z-index: 5; /* Sits above envelope, behind or beside letter */
@@ -208,6 +208,7 @@
         .flap.open .heart > img {
             opacity: 0;
             transition: opacity 0.5s ease;
+            cursor: auto;
         }
         
         .left {
@@ -249,6 +250,58 @@
         .right.open {
             transform: translateY(-50%) rotateY(180deg);
         }
+
+        .flower-rain {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 2000;
+        }
+
+        .falling-flower {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            opacity: 0;
+            pointer-events: none;
+            transition: left 1.2s ease-out, top 1.2s ease-out, opacity 0.2s ease;
+        }
+
+        .flower-rain.fade-out .falling-flower {
+            animation: flowerFade 2s ease forwards;
+        }
+
+        @keyframes flowerFade {
+
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+        }
+
+        .content p:nth-child(1) {
+            font-size: 15px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .content p:nth-child(2) {
+            font-size: 10px;
+        }
+
+        .content img {
+            width: 150px;
+            height: auto;
+        }
     </style>
 </head>
 <body spellcheck="false">
@@ -266,7 +319,7 @@
                 <div class="right"></div>
                 
                 <!-- Flowers hidden inside the envelope -->
-                <img src="flowers.png" alt="Flowers" class="flowers" id="flowerImg">
+                <img class="flowers" id="flowerImg">
 
                 <div class="flap" id="flap">
                     <div class="heart">
@@ -276,43 +329,182 @@
                 <div class="bottom"></div>
                 <div class="letter" id="letterBox">
                     <div class="content">
-                        <p>HAPPY BIRTHDAY!</p>
+                        <p>HAPPY BIRTHDAY</p><br>
+                        <p>BELATED HAPPY BIRTHDAY CHESKAA🥳🥳. Hello Chess, First of all, i just want to say na im really glad na nag confess ako sayo kasi gumaan na yung loob ko and ayoko na mangyari ulit yung nangyari nung g9 but yung gusto ko talaga is maging financially stable muna bago ako mag confess pero baka 6-7(67) years from now pa yun so naglakas loob nako ngayon. I honestly didn't know kung anong ibibigay ko sayo and i thought na bulaklak nalang kaya tas may nakita ako sa tiktok na digital bouquet something and marunong si ryan so nagpa code ako.<img src="./ryne3.jpg">jumpscare muwhehehe<br><br>I made this simple little bouquet for you because i wanted to give you something na di ko magawa sa personal because of our distance and i want to say na im sorry that some of the things i did or said reached a point where i made you cry. I don't intended to hurt you but ayun umiyak ka, and i feel bad knowing na i was the reason you felt that way, i know im inexperience sa mga gantong bagay but im trying my best to be better. Im still learning how to handle things like this and i know i won't always get everything right, but i genuinely want to learn from my mistakes, I really appreciate your patience with me despite the times i messed things up honestly nung unang beses na umiyak ka di ko talaga alam yung gagawin ko like walang pumapasok sa utak ko nung time na yun and like sakto pa na kumakain ako nun so nakatulala lang ako WHAHAHA. Anyways, i hope this little bouquet can atleast make your day a little better, even if it's not much and parang bad mood ka pa naman ngayon so sana maging good mood kana. Ayun lang hihi.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+<div class="flower-rain" id="flowerRain"></div>
+<audio id="tunog" src="../diane/hbd.mp3"></audio>
+<script>
+    const left = document.querySelector(".left");
+    const right = document.querySelector(".right");
+    const heartBtn = document.getElementById("heartBtn");
+    const flap = document.getElementById("flap");
+    const letterBox = document.getElementById("letterBox");
+    const envelope = document.getElementById("envelope");
+    const envelopeWrapper = document.getElementById("envelopeWrapper");
+    const bottom = document.querySelector(".bottom");
+    const flowerImg = document.getElementById("flowerImg");
+    const flowerRain = document.getElementById("flowerRain");
 
-    <script>
-        const left = document.querySelector(".left");
-        const right = document.querySelector(".right"); 
-        const heartBtn = document.getElementById("heartBtn");
-        const flap = document.getElementById("flap");
-        const letterBox = document.getElementById("letterBox");
-        const envelope = document.getElementById("envelope");
-        const envelopeWrapper = document.getElementById("envelopeWrapper");
-        const bottom = document.querySelector(".bottom");
-        const flowerImg = document.getElementById("flowerImg");
+    let clickCount = 0;
 
-        let clickCount = 0;
+    heartBtn.addEventListener("click", function () {
 
-        heartBtn.addEventListener("click", () => {
-            if (clickCount === 0) {
+        if (clickCount === 0) {
 
-                envelopeWrapper.classList.add("open");
-                clickCount = 1;
-            } else if (clickCount === 1) {
+            envelopeWrapper.classList.add("open");
 
-                flap.classList.add("open");
-                bottom.classList.add("open");  
-                left.classList.add("open");    
-                right.classList.add("open");   
-                letterBox.classList.add("open");
-                envelope.classList.add("open");
-                flowerImg.classList.add("open");
-                clickCount = 2; 
-            }
-        });
-    </script>
+            clickCount = 1;
+
+        } 
+        
+        else if (clickCount === 1) {
+
+            flap.classList.add("open");
+            bottom.classList.add("open");
+            left.classList.add("open");
+            right.classList.add("open");
+            letterBox.classList.add("open");
+            envelope.classList.add("open");
+            flowerImg.classList.add("open");
+
+            clickCount = 2;
+
+            const tunog = document.getElementById("tunog");
+            tunog.play();
+            setTimeout(startFlowerRain, 150);
+
+        }
+    });
+
+
+    function createFlower(x, y) {
+
+        const flower = document.createElement("img");
+
+        flower.src = "pansies.webp";
+        flower.classList.add("falling-flower");
+
+        flower.style.left = x + "px";
+        flower.style.top = y + "px";
+
+        flowerRain.appendChild(flower);
+    }
+
+
+    function startFlowerRain() {
+
+    flowerRain.innerHTML = "";
+
+    const rect = envelope.getBoundingClientRect();
+
+    // EXACT starting point: middle of envelope
+    const centerX = rect.left + rect.width / 2 - 35;
+    const centerY = rect.top + rect.height / 2 - 35;
+
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    // Make enough circles to reach the entire screen
+    const rings = 10;
+
+    for (let ring = 1; ring <= rings; ring++) {
+
+        // Each circle gets MUCH bigger
+        const radius = ring * 75;
+
+        // More flowers on larger circles
+        const amount = 10 + ring * 5;
+
+        for (let i = 0; i < amount; i++) {
+
+        const flower = document.createElement("img");
+
+        const random = Math.random();
+
+        if (random < 0.3) {
+            flower.src = "pansies.webp";
+        } else if (random < 0.6) {
+            flower.src = "dahila.png";
+        } else if (random < 0.75) {
+            flower.src = "flowers.png";
+        } else if (random < 0.8) {
+            flower.src = "ryne1.jpg";
+        } else if (random < 0.85) {
+            flower.src = "ryne2.jpg";
+        } else if (random < 0.9) {
+            flower.src = "ryne3.jpg";
+        } else if (random < 0.95) {
+            flower.src = "ryne4.jpg";
+        } else {
+            flower.src = "ryne5.jpg";
+        }
+            
+            flower.className = "falling-flower";
+
+            // Hidden at first
+            flower.style.left = centerX + "px";
+            flower.style.top = centerY + "px";
+            flower.style.opacity = "0";
+
+            flowerRain.appendChild(flower);
+
+            // Spread flowers around the circle
+            const angle =
+                (i / amount) * Math.PI * 2
+                + (Math.random() - 0.5) * 0.5;
+
+            // Randomize the distance
+            const randomRadius =
+                radius + (Math.random() - 0.5) * 100;
+
+            let targetX =
+                centerX +
+                Math.cos(angle) * randomRadius;
+
+            let targetY =
+                centerY +
+                Math.sin(angle) * randomRadius;
+
+            // Allow flowers to reach the edges
+            targetX = Math.max(
+                -40,
+                Math.min(screenWidth - 30, targetX)
+            );
+
+            targetY = Math.max(
+                -40,
+                Math.min(screenHeight - 30, targetY)
+            );
+
+            // Each ring comes out after the previous ring
+            setTimeout(() => {
+
+                // Make flower appear ONLY when it starts flying
+                flower.style.opacity = "1";
+
+                flower.style.left = targetX + "px";
+                flower.style.top = targetY + "px";
+
+            }, ring * 180 + Math.random() * 150);
+        }
+    }
+
+    // Fade everything after the explosion
+    setTimeout(() => {
+        flowerRain.classList.add("fade-out");
+    }, 4000);
+
+    // Clean everything up
+    setTimeout(() => {
+        flowerRain.innerHTML = "";
+        flowerRain.classList.remove("fade-out");
+    }, 6000);
+}
+</script>
 </body>
 </html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Passcode</title>
+    <style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(120deg, #c581f1, #984cd3, #5a1f81);
+        color: #e5e7eb;
+    }
+    .panel {
+        width: min(92vw, 360px);
+        background: rgba(10, 4, 14, 0.76);
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        border-radius: 20px;
+        padding: 28px 22px 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,.25);
+    }
+    h1 {
+        margin: 0 0 18px;
+        font-size: 1.4rem;
+        text-align: center;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+    .display {
+        height: 52px;
+        margin-bottom: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        background: rgba(38, 5, 75, 0.18);
+        border-radius: 12px;
+        border: 1px solid rgba(120, 40, 248, 0.35);
+        font-size: 1.6rem;
+        letter-spacing: 0.5rem;
+        padding: 0 10px;
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #9e03f8;
+        opacity: 0.2;
+        transition: opacity 0.2s ease;
+    }
+    .dot.filled {
+        opacity: 1;
+        background: #7f1af3;
+        box-shadow: 0 0 12px rgba(87, 16, 219, 0.8);
+    }
+    .keypad {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 8px;
+    }
+    button {
+        border: 0;
+        border-radius: 14px;
+        height: 58px;
+        font-size: 1.35rem;
+        font-weight: 700;
+        cursor: pointer;
+        color: #e2e8f0;
+        background: rgba(91, 52, 125, 0.9);
+        transition: transform 0.08s ease, background 0.2s ease;
+    }
+    button:hover { background: rgba(115, 70, 150, 0.95);}
+    button:active { transform: scale(0.97); }
+    .action {
+        background: rgba(16, 185, 129, 0.8);
+    }
+    .action:hover { background: rgba(5, 150, 105, 0.9); }
+    .clear {
+        background: rgba(239, 68, 68, 0.8);
+    }
+    .clear:hover { background: rgba(220, 38, 38, 0.9); }
+    .status {
+        margin-top: 18px;
+        min-height: 20px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #cbd5e1;
+    }
+    .status.error { color: #fca5a5; }
+    .status.success { color: #86efac; }
+    </style>
+</head>
+<body>
+    <div class="panel">
+    <h1>Passcode</h1>
+    <div class="display" aria-live="polite" aria-label="Passcode entry display">
+        <span class="dot" data-index="0"></span>
+        <span class="dot" data-index="1"></span>
+        <span class="dot" data-index="2"></span>
+        <span class="dot" data-index="3"></span>
+    </div>
+    <div class="keypad" aria-label="Numeric keypad">
+        <button type="button" data-value="1">1</button>
+        <button type="button" data-value="2">2</button>
+        <button type="button" data-value="3">3</button>
+        <button type="button" data-value="4">4</button>
+        <button type="button" data-value="5">5</button>
+        <button type="button" data-value="6">6</button>
+        <button type="button" data-value="7">7</button>
+        <button type="button" data-value="8">8</button>
+        <button type="button" data-value="9">9</button>
+        <button type="button" class="clear" data-action="clear">Clear</button>
+        <button type="button" data-value="0">0</button>
+        <button type="button" class="action" data-action="submit">Enter</button>
+    </div>
+    <div class="status" id="status" aria-live="polite"></div>
+    </div>
+    <script>
+    const correctPasscode = "4267";
+    const state = { value: "" };
+    const statusEl = document.getElementById("status");
+    const dots = [...document.querySelectorAll(".dot")];
+    function renderDots() {
+        dots.forEach((dot, index) => {
+        dot.classList.toggle("filled", index < state.value.length);
+        });
+    }
+    function showStatus(message, type = "") {
+        statusEl.textContent = message;
+        statusEl.className = `status ${type}`.trim();
+    }
+    document.querySelectorAll("button[data-value]").forEach((button) => {
+        button.addEventListener("click", () => {
+        if (state.value.length >= correctPasscode.length) return;
+        state.value += button.dataset.value;
+        renderDots();
+        showStatus("");
+        });
+    });
+    document.querySelector("button[data-action='clear']").addEventListener("click", () => {
+        state.value = "";
+        renderDots();
+        showStatus("");
+    });
+    document.querySelector("button[data-action='submit']").addEventListener("click", () => {
+        if (state.value.length < correctPasscode.length) {
+        showStatus("Passcode incomplete.", "error");
+        return;
+        }
+        if (state.value === correctPasscode) {
+        showStatus("congrats", "success");
+        setTimeout(() => {
+            window.location.href = "bagyo.html"
+        }, 1000);
+        } else {
+        showStatus("Mali boss", "error");
+        state.value = "";
+        renderDots();
+        }
+    });
+    renderDots();
+    </script>
+</body>
+</html>
